@@ -34,9 +34,7 @@ func main() {
 	}
 
 	// parse said flags
-	parser := flags.NewParser(&opts, flags.Default)
-	parser.Usage = "[OPTIONS] DIR"
-	_, err := parser.Parse()
+	_, err := flags.Parse(&opts)
 	if err != nil {
 		if e, ok := err.(*flags.Error); ok {
 			if e.Type == flags.ErrHelp {
