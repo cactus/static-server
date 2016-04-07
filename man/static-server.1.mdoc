@@ -3,7 +3,7 @@
 .Os STATIC-SERVER VERSION
 .Sh NAME
 .Nm static-server 
-.Nd serves the contents of a given directory over http 
+.Nd serves the contents of a given directory tree over http 
 .Sh SYNOPSIS
 .Nm static-server
 .Oo
@@ -15,18 +15,25 @@
 .Sh DESCRIPTION
 The 
 .Sy static-server
-utility is useful for testing. It serves the contents of a
-given 
-.Em directory
-over http. Nothing more.
-.Pp
-If
-.Em directory
-is omitted, the current working directory is assume.
+utility servers the contents of a given directory tree over http.
 .Sh OPTIONS
 .Bl -tag -width Ds
-.It Fl l Ns , Fl -listen Ns = Ns Aq Ar address:port
-Address:port to bind to for HTTP.
+.It Fl r Ns , Fl -root Ns = Ns Aq Ar directory
+Root directory to server from.
+Default: "."
+.It Fl -listen Ns = Ns Aq Ar address:port
+Address and port to listen to, as a string of "address:port".
+Default: "0.0.0.0:8080"
+.It Fl -ssl-listen Ns = Ns Aq Ar address:port
+Address and port to listen via SSL to, as a string of "address:port".
+.It Fl -ssl-key Ns = Ns Aq Ar ssl-key-file
+Path to ssl private key. Default: key.pem
+.It Fl -ssl-cert Ns = Ns Aq Ar ssl-cert-file
+Path to ssl certificate. Default: cert.pem
+.It Fl v Ns , Fl -verbose
+Show verbose (debug) level log output
+.It Fl V Ns , Fl -version
+Print version and exit; specify twice to show license information
 .It Fl h Ns , Fl -help
 Show help output and exit
 .El
