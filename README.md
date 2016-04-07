@@ -8,7 +8,7 @@ given directory over http.
 
     $ static-server -h
     Usage:
-      static-server-netgo [OPTIONS] DIR
+      static-server-netgo [OPTIONS]
     
     Application Options:
       -r, --root=       Root directory to server from (default: .)
