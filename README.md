@@ -8,13 +8,20 @@ given directory over http.
 
     $ static-server -h
     Usage:
-      static-server [OPTIONS] DIR
-
+      static-server-netgo [OPTIONS] DIR
+    
     Application Options:
-      -l, --listen= Address:Port to bind to for HTTP (0.0.0.0:8000)
-
+      -r, --root=       Root directory to server from (default: .)
+      -l, --listen=     Address:Port to bind to for HTTP (default: 0.0.0.0:8000)
+          --ssl-listen= Address:Port to bind to for HTTPS/SSL/TLS
+          --ssl-key=    ssl private key (key.pem) path
+          --ssl-cert=   ssl cert (cert.pem) path
+      -v, --verbose     Show verbose (debug) log level output
+      -V, --version     Print version and exit; specify twice to show license information
+    
     Help Options:
-      -h, --help    Show this help message
+      -h, --help        Show this help message
+    
 
 ## License
 
