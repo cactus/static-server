@@ -6,9 +6,9 @@ static-server
 The `static-server` utility is useful for testing. It serves the contents of a
 given directory over http.
 
-    $ simple-server -h
+    $ static-server -h
     Usage:
-      simple-server [OPTIONS] DIR
+      static-server [OPTIONS] DIR
 
     Application Options:
       -l, --listen= Address:Port to bind to for HTTP (0.0.0.0:8000)
