@@ -1,0 +1,10 @@
+/bin
+/pkg
+/tar
+/man/*.[1-9]
+/vendor/src
+/server.pem
+/server.key
+/server.crt
+/server.csr
+*.py[co]
