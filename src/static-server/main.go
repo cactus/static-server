@@ -36,6 +36,7 @@ func main() {
 		BindAddressSSL string `long:"ssl-listen" description:"Address:Port to bind to for HTTPS/SSL/TLS"`
 		SSLKey         string `long:"ssl-key" description:"ssl private key (key.pem) path"`
 		SSLCert        string `long:"ssl-cert" description:"ssl cert (cert.pem) path"`
+		NoIndex        bool   `long:"no-indexing" short:"x"  description:"disable directory indexing"`
 		Verbose        bool   `short:"v" long:"verbose" description:"Show verbose (debug) log level output"`
 		Version        []bool `short:"V" long:"version" description:"Print version and exit; specify twice to show license information"`
 	}
@@ -109,7 +110,12 @@ func main() {
 		tpl = template.Must(template.New("main").Funcs(tplFuncMap).Parse(strings.TrimSpace(string(tplText))))
 	}
 
-	staticServer := staticServer(http.Dir(opts.RootDir), tpl, indexes, headers, readmes)
+	indexing := true
+	if opts.NoIndex == true {
+		indexing = false
+	}
+
+	staticServer := staticServer(http.Dir(opts.RootDir), tpl, indexes, headers, readmes, indexing)
 
 	if opts.BindAddress != "" {
 		log.Println("Starting server on", opts.BindAddress)

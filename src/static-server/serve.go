@@ -30,6 +30,7 @@ type fileServer struct {
 	indexList  []string
 	headerList []string
 	readmeList []string
+	indexing   bool
 }
 
 func (fs *fileServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -169,6 +170,11 @@ func (fs *fileServer) serveFile(w http.ResponseWriter, r *http.Request, name str
 			}
 		}
 
+		if !fs.indexing {
+			http.Error(w, "403 Forbidden", http.StatusForbidden)
+			return
+		}
+
 		// didn't find an index file
 		if checkLastModified(w, r, d.ModTime()) {
 			return
@@ -195,7 +201,7 @@ func openWithStat(fs http.FileSystem, name string) (http.File, os.FileInfo, erro
 	return f, d, nil
 }
 
-func staticServer(root http.FileSystem, tpl *template.Template, indexList, headerList, readmeList []string) http.Handler {
+func staticServer(root http.FileSystem, tpl *template.Template, indexList, headerList, readmeList []string, indexing bool) http.Handler {
 	if len(indexList) == 0 {
 		indexList = []string{"index.html"}
 	}
@@ -210,5 +216,6 @@ func staticServer(root http.FileSystem, tpl *template.Template, indexList, heade
 		indexList:  indexList,
 		readmeList: readmeList,
 		headerList: headerList,
+		indexing:   indexing,
 	}
 }
