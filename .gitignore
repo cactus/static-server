@@ -1,6 +1,7 @@
 /bin
 /pkg
 /tar
+/test
 /man/*.[1-9]
 /vendor/src
 /server.pem

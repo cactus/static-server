@@ -7,10 +7,13 @@ package main
 
 import (
 	"fmt"
+	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"runtime"
+	"strings"
 	"time"
 
 	flags "github.com/jessevdk/go-flags"
@@ -24,6 +27,10 @@ var (
 func main() {
 	// command line flags
 	var opts struct {
+		IndexList      string `long:"indexes" default:"index.html" description:"comma separated (ordered) list of index files"`
+		ReadmeList     string `long:"readmes" default:"" description:"comma separated (ordered) list of readme files to auto append to dir listings"`
+		HeaderList     string `long:"headers" default:"" description:"comma separated (ordered) list of header files to auto prepend to dir listings"`
+		Template       string `long:"template" short:"t" default:"" description:"template file to use for directory listings"`
 		RootDir        string `long:"root" short:"r" default:"." description:"Root directory to server from"`
 		BindAddress    string `long:"listen" short:"l" default:"0.0.0.0:8000" description:"Address:Port to bind to for HTTP"`
 		BindAddressSSL string `long:"ssl-listen" description:"Address:Port to bind to for HTTPS/SSL/TLS"`
@@ -69,7 +76,40 @@ func main() {
 		log.Fatal("Specified root directory is not readable, not present, or not a directory")
 	}
 
-	fileServer := http.FileServer(http.Dir(opts.RootDir))
+	indexes := []string{}
+	for _, s := range strings.Split(opts.IndexList, ",") {
+		s = strings.TrimSpace(s)
+		if s != "" {
+			indexes = append(indexes, s)
+		}
+	}
+
+	headers := []string{}
+	for _, s := range strings.Split(opts.HeaderList, ",") {
+		s = strings.TrimSpace(s)
+		if s != "" {
+			headers = append(headers, s)
+		}
+	}
+
+	readmes := []string{}
+	for _, s := range strings.Split(opts.ReadmeList, ",") {
+		s = strings.TrimSpace(s)
+		if s != "" {
+			readmes = append(readmes, s)
+		}
+	}
+
+	var tpl *template.Template
+	if opts.Template != "" {
+		tplText, err := ioutil.ReadFile(opts.Template)
+		if err != nil {
+			log.Fatal(err)
+		}
+		tpl = template.Must(template.New("main").Funcs(tplFuncMap).Parse(strings.TrimSpace(string(tplText))))
+	}
+
+	staticServer := staticServer(http.Dir(opts.RootDir), tpl, indexes, headers, readmes)
 
 	if opts.BindAddress != "" {
 		log.Println("Starting server on", opts.BindAddress)
@@ -77,7 +117,7 @@ func main() {
 			srv := &http.Server{
 				Addr:        opts.BindAddress,
 				ReadTimeout: 30 * time.Second,
-				Handler:     fileServer,
+				Handler:     staticServer,
 			}
 			log.Fatal(srv.ListenAndServe())
 		}()
@@ -88,7 +128,7 @@ func main() {
 			srv := &http.Server{
 				Addr:        opts.BindAddressSSL,
 				ReadTimeout: 30 * time.Second,
-				Handler:     fileServer,
+				Handler:     staticServer,
 			}
 			log.Fatal(srv.ListenAndServeTLS(opts.SSLCert, opts.SSLKey))
 		}()
