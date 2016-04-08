@@ -5,6 +5,8 @@
 // static-server daemon
 package main
 
+//go:generate go run ../../tools/genversion.go -pkg $GOPACKAGE -input ../../DEPS.md -output version_info_generated.go
+
 import (
 	"fmt"
 	"html/template"
@@ -54,11 +56,9 @@ func main() {
 
 	if len(opts.Version) > 0 {
 		fmt.Printf("%s %s (%s,%s-%s)\n", ServerName, ServerVersion, runtime.Version(), runtime.Compiler, runtime.GOARCH)
-		/*
-			        if len(opts.Version) > 1 {
-						fmt.Printf("\n%s\n", strings.TrimSpace(licenseText))
-					}
-		*/
+		if len(opts.Version) > 1 {
+			fmt.Printf("\n%s\n", strings.TrimSpace(licenseText))
+		}
 		os.Exit(0)
 	}
 
