@@ -34,6 +34,7 @@ func main() {
 		HeaderList     string `long:"headers" default:"" description:"comma separated (ordered) list of header files to auto prepend to dir listings"`
 		Template       string `long:"template" short:"t" default:"" description:"template file to use for directory listings"`
 		RootDir        string `long:"root" short:"r" default:"." description:"Root directory to server from"`
+		LogFormat      string `long:"logfmt" default:"text" description:"logging format. One of 'text' or 'json'"`
 		BindAddress    string `long:"listen" short:"l" default:"0.0.0.0:8000" description:"Address:Port to bind to for HTTP"`
 		BindAddressSSL string `long:"ssl-listen" description:"Address:Port to bind to for HTTPS/SSL/TLS"`
 		SSLKey         string `long:"ssl-key" description:"ssl private key (key.pem) path"`
@@ -60,6 +61,10 @@ func main() {
 			fmt.Printf("\n%s\n", strings.TrimSpace(licenseText))
 		}
 		os.Exit(0)
+	}
+
+	if opts.LogFormat != "text" && opts.LogFormat != "json" {
+		log.Fatal("logfmt must be one of 'text' or 'json'")
 	}
 
 	if opts.BindAddress == "" && opts.BindAddressSSL == "" {
