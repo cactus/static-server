@@ -13,5 +13,6 @@ This software is available under the MIT License at:
 Portions of this software utilize third party libraries:
 ├── Go std library
 │   └── net/http/fs.go imported/modified        (BSD-style)
+├── https://github.com/cactus/mlog              (MIT License)
 └── https://github.com/jessevdk/go-flags        (BSD License)
 `
