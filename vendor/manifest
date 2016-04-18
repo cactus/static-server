@@ -2,9 +2,9 @@
 	"version": 0,
 	"dependencies": [
 		{
-			"importpath": "github.com/cactus/gologit",
-			"repository": "https://github.com/cactus/gologit",
-			"revision": "785a05a76617462c7233761f2ac1a79375f51472",
+			"importpath": "github.com/cactus/mlog",
+			"repository": "https://github.com/cactus/mlog",
+			"revision": "13342c154ebd40f07fb013d3c4602cd681bcee0b",
 			"branch": "master"
 		},
 		{
@@ -26,13 +26,6 @@
 			"revision": "e8554b8641db39598be7f6342874b958f12ae1d4",
 			"branch": "master",
 			"path": "/difflib"
-		},
-		{
-			"importpath": "github.com/stretchr/testify/assert",
-			"repository": "https://github.com/stretchr/testify",
-			"revision": "e3a8ff8ce36581f87a15341206f205b1da467059",
-			"branch": "master",
-			"path": "/assert"
 		}
 	]
 }

@@ -11,13 +11,13 @@ import (
 	"fmt"
 	"html/template"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"runtime"
 	"strings"
 	"time"
 
+	"github.com/cactus/mlog"
 	flags "github.com/jessevdk/go-flags"
 )
 
@@ -34,7 +34,7 @@ func main() {
 		HeaderList     string `long:"headers" default:"" description:"comma separated (ordered) list of header files to auto prepend to dir listings"`
 		Template       string `long:"template" short:"t" default:"" description:"template file to use for directory listings"`
 		RootDir        string `long:"root" short:"r" default:"." description:"Root directory to server from"`
-		LogFormat      string `long:"logfmt" default:"text" description:"logging format. One of 'text' or 'json'"`
+		NoLogTS        bool   `long:"no-log-ts" description:"Do not add a timestamp to logging"`
 		BindAddress    string `long:"listen" short:"l" default:"0.0.0.0:8000" description:"Address:Port to bind to for HTTP"`
 		BindAddressSSL string `long:"ssl-listen" description:"Address:Port to bind to for HTTPS/SSL/TLS"`
 		SSLKey         string `long:"ssl-key" description:"ssl private key (key.pem) path"`
@@ -63,23 +63,34 @@ func main() {
 		os.Exit(0)
 	}
 
-	if opts.LogFormat != "text" && opts.LogFormat != "json" {
-		log.Fatal("logfmt must be one of 'text' or 'json'")
-	}
+	// start out with a very bare logger that only prints
+	// the message (no special format or log elements)
+	mlog.SetFlags(0)
 
 	if opts.BindAddress == "" && opts.BindAddressSSL == "" {
-		log.Fatal("One of listen or ssl-listen required")
+		mlog.Fatal("One of listen or ssl-listen required")
 	}
 
 	if opts.BindAddressSSL != "" && opts.SSLKey == "" {
-		log.Fatal("ssl-key is required when specifying ssl-listen")
+		mlog.Fatal("ssl-key is required when specifying ssl-listen")
 	}
 	if opts.BindAddressSSL != "" && opts.SSLCert == "" {
-		log.Fatal("ssl-cert is required when specifying ssl-listen")
+		mlog.Fatal("ssl-cert is required when specifying ssl-listen")
+	}
+
+	// now configure a standard logger
+	mlog.SetFlags(mlog.Lstd)
+	if opts.NoLogTS {
+		mlog.SetFlags(mlog.Flags() ^ mlog.Ltimestamp)
+	}
+
+	if opts.Verbose {
+		mlog.SetFlags(mlog.Flags() | mlog.Ldebug)
+		mlog.Debug("debug logging enabled")
 	}
 
 	if finfo, err := os.Stat(opts.RootDir); os.IsNotExist(err) || finfo.Mode().IsDir() != true {
-		log.Fatal("Specified root directory is not readable, not present, or not a directory")
+		mlog.Fatal("Specified root directory is not readable, not present, or not a directory")
 	}
 
 	indexes := []string{}
@@ -110,7 +121,7 @@ func main() {
 	if opts.Template != "" {
 		tplText, err := ioutil.ReadFile(opts.Template)
 		if err != nil {
-			log.Fatal(err)
+			mlog.Fatal(err)
 		}
 		tpl = template.Must(template.New("main").Funcs(tplFuncMap).Parse(strings.TrimSpace(string(tplText))))
 	}
@@ -123,25 +134,25 @@ func main() {
 	staticServer := staticServer(http.Dir(opts.RootDir), tpl, indexes, headers, readmes, indexing)
 
 	if opts.BindAddress != "" {
-		log.Println("Starting server on", opts.BindAddress)
+		mlog.Printf("Starting server on: %s", opts.BindAddress)
 		go func() {
 			srv := &http.Server{
 				Addr:        opts.BindAddress,
 				ReadTimeout: 30 * time.Second,
 				Handler:     staticServer,
 			}
-			log.Fatal(srv.ListenAndServe())
+			mlog.Fatal(srv.ListenAndServe())
 		}()
 	}
 	if opts.BindAddressSSL != "" {
-		log.Println("Starting TLS server on", opts.BindAddressSSL)
+		mlog.Printf("Starting TLS server on: %s", opts.BindAddressSSL)
 		go func() {
 			srv := &http.Server{
 				Addr:        opts.BindAddressSSL,
 				ReadTimeout: 30 * time.Second,
 				Handler:     staticServer,
 			}
-			log.Fatal(srv.ListenAndServeTLS(opts.SSLCert, opts.SSLKey))
+			mlog.Fatal(srv.ListenAndServeTLS(opts.SSLCert, opts.SSLKey))
 		}()
 	}
 
