@@ -65,7 +65,7 @@ func main() {
 
 	// start out with a very bare logger that only prints
 	// the message (no special format or log elements)
-	mlog.SetFlags(0)
+	mlog.SetEmitter(&mlog.FormatWriterPlain{})
 
 	if opts.BindAddress == "" && opts.BindAddressSSL == "" {
 		mlog.Fatal("One of listen or ssl-listen required")
