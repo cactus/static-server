@@ -35,6 +35,8 @@ func main() {
 		Template       string `long:"template" short:"t" default:"" description:"template file to use for directory listings"`
 		RootDir        string `long:"root" short:"r" default:"." description:"Root directory to server from"`
 		NoLogTS        bool   `long:"no-log-ts" description:"Do not add a timestamp to logging"`
+		LogJSON        bool   `long:"log-json" description:"Log messages in json format"`
+		LogStructured  bool   `long:"log-struct" description:"Log messages in structured text format"`
 		BindAddress    string `long:"listen" short:"l" default:"0.0.0.0:8000" description:"Address:Port to bind to for HTTP"`
 		BindAddressSSL string `long:"ssl-listen" description:"Address:Port to bind to for HTTPS/SSL/TLS"`
 		SSLKey         string `long:"ssl-key" description:"ssl private key (key.pem) path"`
@@ -65,7 +67,14 @@ func main() {
 
 	// start out with a very bare logger that only prints
 	// the message (no special format or log elements)
-	mlog.SetEmitter(&mlog.FormatWriterPlain{})
+	switch {
+	case opts.LogJSON:
+		mlog.SetEmitter(&mlog.FormatWriterJSON{})
+	case opts.LogStructured:
+		mlog.SetEmitter(&mlog.FormatWriterStructured{})
+	default:
+		mlog.SetEmitter(&mlog.FormatWriterPlain{})
+	}
 
 	if opts.BindAddress == "" && opts.BindAddressSSL == "" {
 		mlog.Fatal("One of listen or ssl-listen required")
