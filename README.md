@@ -10,12 +10,9 @@ given directory over http.
       static-server-netgo [OPTIONS]
     
     Application Options:
-          --indexes=     comma separated (ordered) list of index files (default:
-                         index.html)
-          --readmes=     comma separated (ordered) list of readme files to auto
-                         append to dir listings
-          --headers=     comma separated (ordered) list of header files to auto
-                         prepend to dir listings
+          --indexes=     comma separated (ordered) list of index files (default: index.html)
+          --readmes=     comma separated (ordered) list of readme files to auto append to dir listings
+          --headers=     comma separated (ordered) list of header files to auto prepend to dir listings
       -t, --template=    template file to use for directory listings
       -r, --root=        Root directory to server from (default: .)
           --no-log-ts    Do not add a timestamp to logging
