@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+// DirItem represents a directory item for templating
 type DirItem struct {
 	Name    string
 	Link    string
@@ -17,10 +18,12 @@ type DirItem struct {
 	ModTime time.Time
 }
 
+// JustPadding returns a string with size elements of pre-padding
 func JustPadding(s string, size int) string {
 	return strings.Repeat(" ", size-len(s))
 }
 
+// Page represents a page for templating
 type Page struct {
 	Path       string
 	DirItems   []*DirItem

@@ -22,7 +22,9 @@ import (
 )
 
 var (
-	ServerName    = "static-server"
+	// ServerName holds the server name string
+	ServerName = "static-server"
+	// ServerVersion holds the server version string
 	ServerVersion = "no-version"
 )
 
