@@ -32,6 +32,6 @@ given directory over http.
 
 ## License
 
-Released under the [MIT
-license](http://www.opensource.org/licenses/mit-license.php). See `LICENSE.md`
-file for details.
+Released under the [ISC license][1] . See `LICENSE.md` file for details.
+
+[1]: https://choosealicense.com/licenses/isc/
