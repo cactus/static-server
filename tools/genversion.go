@@ -65,7 +65,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	reTildes := regexp.MustCompile("(?m:^~~~.*\n?$)")
+	reTildes := regexp.MustCompile("(?m:^(~|`){3}.*\n?$)")
 	reComment := regexp.MustCompile("(?m:^//.*\n?$)")
 	inputText := string(b)
 	inputText = reTildes.ReplaceAllLiteralString(inputText, "")
