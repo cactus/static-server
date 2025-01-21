@@ -3,7 +3,10 @@ module github.com/cactus/static-server
 go 1.12
 
 require (
-	github.com/cactus/mlog v0.0.0-20160508212626-8db540deea27
-	github.com/jessevdk/go-flags v0.0.0-20151210164039-aa34304f81c7
-	github.com/stretchr/testify v1.3.0 // indirect
+	github.com/cactus/mlog v1.0.10
+	github.com/cactus/tai64 v1.0.3 // indirect
+	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/jessevdk/go-flags v1.6.1
+	golang.org/x/sys v0.29.0 // indirect
+	gotest.tools/v3 v3.5.1 // indirect
 )

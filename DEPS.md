@@ -1,4 +1,4 @@
-~~~
+```
 This software is available under the MIT License at:
 └── https://github.com/cactus/static-server
 
@@ -7,4 +7,4 @@ Portions of this software utilize third party libraries:
 │   └── net/http/fs.go imported/modified        (BSD-style)
 ├── https://github.com/cactus/mlog              (MIT License)
 └── https://github.com/jessevdk/go-flags        (BSD License)
-~~~
+```
