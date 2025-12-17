@@ -17,7 +17,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cactus/mlog"
+	"codeberg.org/dropwhile/mlog"
 	flags "github.com/jessevdk/go-flags"
 )
 

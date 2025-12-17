@@ -10,7 +10,7 @@ given directory over http.
 ## Install
 
 ```
-go install github.com/cactus/static-server/cmd/static-server@latest
+go install codeberg.org/dropwhile/static-server/cmd/static-server@latest
 ```
 
 ## Usage
