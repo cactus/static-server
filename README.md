@@ -1,6 +1,9 @@
 static-server
 =============
 
+> [!IMPORTANT]
+> Moved to [codeberg](https://codeberg.org/dropwhile/static-server)!
+
 ## About
 
 The `static-server` utility is useful for testing. It serves the contents of a
